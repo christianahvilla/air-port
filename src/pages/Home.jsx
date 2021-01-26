@@ -23,7 +23,6 @@ const Home = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [disabledButton, setDisabledButton] = useState(false);
     const [reservation, setReservation] = useState({});
-    const [open, setOpen] = React.useState(true);
 
     const saveReservation = (newReservation) => dispatch(flightActions.saveReservation(newReservation));
 
@@ -44,7 +43,6 @@ const Home = () => {
         destinies,
         times,
         flights,
-        loading,
     } = flight;
 
     const {
@@ -82,9 +80,9 @@ const Home = () => {
     };
 
     const getDisabled = () => ({
-        0: origin === undefined,
-        1: destiny === undefined,
-        2: time === undefined,
+        0: origin === undefined || origin === '',
+        1: destiny === undefined || destiny === '',
+        2: time === undefined || time === '',
         3: people === undefined,
     })[activeStep];
 
@@ -165,7 +163,7 @@ const Home = () => {
     };
 
     const handleClose = () => {
-        setOpen(false);
+        return true;
     };
 
     const getStepContent = (step) => {
@@ -216,12 +214,13 @@ const Home = () => {
     return (
         <Grid container>
             <Dialog
-                open={loading && open}
+                open
                 onClose={handleClose}
                 PaperProps={{
                     style: {
                         backgroundColor: 'transparent',
                         boxShadow: 'none',
+                        overflow: 'hidden',
                     },
                 }}
             >
@@ -243,23 +242,26 @@ const Home = () => {
                         isStepSkipped={() => false}
                     />
                     <Grid container direction="row" alignItems="center" justify="center">
-                        <Grid item justify="space-around" className={classes.stepContent}>
+                        <Grid item className={classes.stepContent}>
                             {getStepContent(activeStep)}
                         </Grid>
-                        <Grid className={classes.buttonsBottom} container justify="flex-end" direction="row" alignItems="center">
+                        <Grid container className={classes.buttonsBottom} justify="flex-end" direction="row" alignItems="center">
                             <DefaultButton
                                 text="Atras"
+                                color="secondary"
+                                variant="text"
                                 disabled={activeStep === 0}
                                 onClick={handleBack}
                                 className={classes.button}
                             />
 
                             {
-                                activeStep === steps.length - 1 ? (
+                                activeStep === steps.length - 1 && people !== undefined ? (
                                     <Link to="/reservations" className={classes.link}>
                                         <DefaultButton
                                             color="primary"
                                             onClick={handleNext}
+                                            variant="text"
                                             className={classes.button}
                                             disabled={disabledButton}
                                             text={activeStep === steps.length - 1 ? 'Terminar' : 'Siguiente'}
@@ -268,6 +270,7 @@ const Home = () => {
                                 ) : (
                                     <DefaultButton
                                         color="primary"
+                                        variant="text"
                                         onClick={handleNext}
                                         className={classes.button}
                                         disabled={disabledButton}

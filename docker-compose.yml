@@ -1,0 +1,15 @@
+#Filename: docker-compose.yml
+version: '3.7'
+services:
+    web:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 80:80
+        environment:
+            - REACT_APP_NODE_ENV=production
+            - REACT_APP_API_URL=https://airport-api-true-home.herokuapp.com/api
+        volumes:
+            - .:/app
+            - /app/node_modules

@@ -1,18 +1,32 @@
-# Dockerfile for react container
+# Create the image based on the official Node 10 image from Dockerhub
+FROM node:12.11 AS builder
+# Create a new directory
+RUN mkdir -p /app
 
-# From the base directory skydropx/src
-# Use the follow command to create the image
-# docker build  -t deployment -f deployment/Dockerfile .
-# Use the follow command to start the container
-# docker run
-
-# stage: 1
-FROM node:12.9.0 as react-build
+# Change directory so that our commands run inside this new directory
 WORKDIR /app
-COPY package*.json /app/
-RUN npm install
-COPY . ./
+
+# Copy dependency definitions
+COPY package.json /app
+
+# Install dependencies using npm
+RUN npm install --silent
+
+# Get all the code needed to run the ap
+COPY . /app
+
+#Build the app
 RUN npm run build
-RUN npm install -g serve
-EXPOSE $PORT
-CMD serve -p $PORT -s ./build
+
+#==================== Setting up stage ====================#
+
+# Create image based on the official nginx - Alpine image
+FROM nginx:1.13.7-alpine
+
+COPY --from=builder /app/build /usr/share/nginx/html
+# nginx.conf to configure nginx because of react routing
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

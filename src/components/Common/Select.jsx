@@ -21,7 +21,7 @@ const DefaultSelect = (props) => {
 
     return (
         <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="select">Destino</InputLabel>
+            <InputLabel id="select">{label}</InputLabel>
             <Select
                 labelId="select-label"
                 id="select-id"
