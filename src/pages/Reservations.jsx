@@ -1,39 +1,44 @@
 import {
-    Grid, Paper, Typography, TableCell, TableRow, IconButton,
+    Grid, Paper, TableCell, TableRow, IconButton,
 } from '@material-ui/core';
 import { DeleteOutlined } from '@material-ui/icons';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import DefaultTable from '../components/Common/Table';
+import flightActions from '../actions/flight';
+import DefaultSnackbar from '../components/Common/SnackBar';
+import DefaultText from '../components/Common/Text';
+import pagesStyles from './Style';
 
 const Reservations = () => {
-    const createData = (id, origen, destiny, time, people) => {
-        return {
-            id, origen, destiny, time, people,
-        };
-    };
+    const flight = useSelector((state) => state.flight);
+    const dispatch = useDispatch();
+    const [message, setMessage] = useState('');
+    const [severity, setSeverity] = useState('');
+    const [openAlert, setOpenAlert] = useState(false);
+    const classes = pagesStyles();
 
-    const rows = [
-        createData(1, 'CDMX', 'Cancun', '12-12-2021 9:51', 3),
-        createData(2, 'CDMX', 'Morelia', '12-12-2021 9:51', 1),
-        createData(3, 'CDMX', 'MTY', '12-12-2021 9:51', 2),
-        createData(4, 'CDMX', 'GDL', '12-12-2021 9:51', 6),
-        createData(5, 'CDMX', 'La Paz', '12-12-2021 9:51', 4),
-    ];
+    const {
+        flights,
+    } = flight;
 
-    const deleteItem = (index) => {
-        rows.splice(index, 1);
+    const handleDelete = (id) => {
+        setMessage('¡Reservación cancelada!');
+        setSeverity('success');
+        setOpenAlert(true);
+        dispatch(flightActions.deleteReservation(id));
     };
 
     const getCells = () => {
-        return rows.map((item, index) => {
+        return flights.map((item) => {
             return (
                 <TableRow key={`row-${item.id}`}>
-                    <TableCell align="center">{item.origen}</TableCell>
+                    <TableCell align="center">{item.origin}</TableCell>
                     <TableCell align="center">{item.destiny}</TableCell>
                     <TableCell align="center">{item.time}</TableCell>
                     <TableCell align="right">{item.people}</TableCell>
                     <TableCell align="center">
-                        <IconButton aria-label="delete" color="secondary" onClick={deleteItem(index)}>
+                        <IconButton aria-label="delete" color="secondary" onClick={() => { handleDelete(item.id); }}>
                             <DeleteOutlined />
                         </IconButton>
                     </TableCell>
@@ -54,13 +59,26 @@ const Reservations = () => {
         );
     };
 
+    const handleClose = useCallback(() => {
+        setOpenAlert(false);
+    }, []);
+
     return (
         <Grid container>
+            <DefaultSnackbar
+                handleClose={handleClose}
+                message={message}
+                open={openAlert}
+                severity={severity}
+            />
             <Grid item xs={1} />
             <Grid item xs={10}>
-                <Typography variant="h2" gutterBottom>
-                    Tus reservaciones
-                </Typography>
+                <DefaultText
+                    className={classes.title}
+                    text="Reservaciones"
+                    variant="h3"
+                    component="h1"
+                />
                 <Paper elevation={0}>
                     <DefaultTable
                         getColumns={getColumns}

@@ -6,16 +6,10 @@ import {
     TableContainer,
     Paper,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles({
-    table: {
-        minWidth: 650,
-    },
-});
+import commonStyles from './Style';
 
 const DefaultTable = (props) => {
-    const classes = useStyles();
+    const classes = commonStyles();
     const {
         getColumns,
         getCells,

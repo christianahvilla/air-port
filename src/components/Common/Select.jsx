@@ -1,21 +1,11 @@
 import React from 'react';
 import {
-    FormControl, InputLabel, makeStyles, MenuItem, Select,
+    FormControl, InputLabel, MenuItem, Select,
 } from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 160,
-        width: 360,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-}));
+import commonStyles from './Style';
 
 const DefaultSelect = (props) => {
-    const classes = useStyles();
+    const classes = commonStyles();
     const {
         items,
         handleChange,
@@ -31,10 +21,10 @@ const DefaultSelect = (props) => {
 
     return (
         <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">Destino</InputLabel>
+            <InputLabel id="select">Destino</InputLabel>
             <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
+                labelId="select-label"
+                id="select-id"
                 value={selected}
                 onChange={handleChange}
                 label={label}

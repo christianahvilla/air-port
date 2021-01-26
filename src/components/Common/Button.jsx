@@ -10,6 +10,7 @@ const DefaultButton = (props) => {
         className,
         disabled,
     } = props;
+
     return (
         <Button
             className={className}
@@ -21,6 +22,15 @@ const DefaultButton = (props) => {
             {text}
         </Button>
     );
+};
+
+DefaultButton.defaultProps = {
+    variant: '',
+    color: '',
+    onClick: () => {},
+    text: '',
+    className: '',
+    disabled: false,
 };
 
 export default DefaultButton;
