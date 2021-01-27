@@ -52,6 +52,7 @@ const Home = () => {
         destiny,
         time,
         people,
+        loading,
     } = reservation;
 
     const getOrigin = () => {
@@ -222,7 +223,6 @@ const Home = () => {
                     style: {
                         backgroundColor: 'transparent',
                         boxShadow: 'none',
-                        overflow: 'hidden',
                     },
                 }}
             >
