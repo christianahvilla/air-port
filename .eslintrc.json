@@ -55,6 +55,9 @@
 
         "react-hooks/exhaustive-deps": "off",
 
-        "camelcase": "off"
+        "camelcase": "off",
+
+         //should add ".ts" if typescript project
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
     }
 }
