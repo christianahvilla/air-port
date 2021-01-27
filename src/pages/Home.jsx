@@ -23,6 +23,7 @@ const Home = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [disabledButton, setDisabledButton] = useState(false);
     const [reservation, setReservation] = useState({});
+    const [open, setOpen] = React.useState(true);
 
     const saveReservation = (newReservation) => dispatch(flightActions.saveReservation(newReservation));
 
@@ -43,6 +44,7 @@ const Home = () => {
         destinies,
         times,
         flights,
+        loading,
     } = flight;
 
     const {
@@ -163,7 +165,7 @@ const Home = () => {
     };
 
     const handleClose = () => {
-        return true;
+        setOpen(false);
     };
 
     const getStepContent = (step) => {
@@ -214,7 +216,7 @@ const Home = () => {
     return (
         <Grid container>
             <Dialog
-                open
+                open={open && loading}
                 onClose={handleClose}
                 PaperProps={{
                     style: {
